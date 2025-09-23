@@ -32,7 +32,6 @@ function show_login_form() {
         <style>
             body {
                 background-color: #f5f5f5;
-                background-image:url("/images/sozai/zetsubou_1.jpg");
                 color: #333;
                 font-family: "MS PGothic", "Osaka", Arial, sans-serif;
                 font-size: 14px;
