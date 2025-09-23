@@ -23,7 +23,6 @@ XML;
     if (file_exists('feed.xml') && filesize('feed.xml') > 0) {
         $xml = simplexml_load_file('feed.xml');
         if ($xml === false) {
-            // If corrupted, create new
             $xml = new SimpleXMLElement('<?xml version="1.0"?><rss version="2.0"><channel></channel></rss>');
         }
     } else {
@@ -34,7 +33,7 @@ XML;
     if (!isset($xml->channel->title)) {
         $xml->channel->addChild('title', 'YOUR SITE UPDATES');
         $xml->channel->addChild('link', 'https://sitename.com/');
-        $xml->channel->addChild('description', 'Recent updates from  YOURSITENAMEORWHATEVER');
+        $xml->channel->addChild('description', 'Recent updates from YOURSITENAMEORWHATEVER');
     }
 
     // Add new item at beginning
@@ -53,12 +52,14 @@ XML;
     header("Location: admin.php");
     exit;
 }
+
+// Format "now" for datetime-local (YYYY-MM-DDTHH:MM)
+$defaultDate = date('Y-m-d\TH:i');
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Add RSS Item</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
         body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; }
         textarea { width: 100%; height: 150px; }
@@ -78,7 +79,7 @@ XML;
         </div>
         <div class="form-group">
             <label>Publish Date:</label>
-            <input type="datetime-local" name="pubdate" id="pubdate" required>
+            <input type="datetime-local" name="pubdate" value="<?php echo $defaultDate; ?>" required>
         </div>
         <div class="form-group">
             <label>Description:</label>
@@ -86,13 +87,5 @@ XML;
         </div>
         <button type="submit">Add Item</button>
     </form>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script>
-        flatpickr("#pubdate", {
-            enableTime: true,
-            dateFormat: "Y-m-d H:i",
-            defaultDate: "today"
-        });
-    </script>
 </body>
 </html>
