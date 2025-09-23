@@ -2,7 +2,7 @@
 header('Content-Type: text/html; charset=utf-8');
 
 function getFeedItems() {
-    $feedPath = 'feed.xml';
+    $feedPath = "rss/feed.xml";
     
     if (!file_exists($feedPath) || filesize($feedPath) == 0) {
         return [];
@@ -34,11 +34,10 @@ function getFeedItems() {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Updates</title>
+    <title>updates in plaintext</title>
     <style>
 
     </style>
-
 </head>
 <body>
     <div class="rss-feed">
@@ -49,7 +48,7 @@ function getFeedItems() {
             <?php foreach ($items as $item): ?>
             <div class="rss-item">
                 <div class="rss-header">
-                    <span class="rss-date">- <b><?= $item['date'] ?></b></span>
+                    <span class="rss-date"> - <b><?= $item['date'] ?></b></span>
                     <span class="rss-title"> 
                         <b>
                         <a href="<?= htmlspecialchars($item['link']) ?>"><?= htmlspecialchars($item['title']) ?></a>
