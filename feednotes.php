@@ -1,8 +1,9 @@
 <?php
+header('Content-Type: text/html; charset=utf-8');
 
 function getFeedItems() {
-    $feedPath = "rss/feed.xml";
-    
+    $feedPath = $_SERVER['DOCUMENT_ROOT'] . '/rss/feed.xml';
+
     if (!file_exists($feedPath) || filesize($feedPath) == 0) {
         return [];
     }
@@ -15,16 +16,19 @@ function getFeedItems() {
 
     $items = [];
     foreach ($xml->channel->item as $item) {
+        $timestamp = strtotime((string)$item->pubDate);
+
         $items[] = [
-            'date' => date('n.j.y', strtotime((string)$item->pubDate)),
-            'title' => html_entity_decode((string)$item->title, ENT_QUOTES, 'UTF-8'), // FIXED
-            'link' => (string)$item->link,
-            'description' => html_entity_decode((string)$item->description, ENT_QUOTES, 'UTF-8') // FIXED
+            'timestamp'   => $timestamp, // ✅ REAL date for sorting
+            'date'        => date('n.j.y', $timestamp), // ✅ display only
+            'title'       => html_entity_decode((string)$item->title, ENT_QUOTES, 'UTF-8'),
+            'link'        => (string)$item->link,
+            'description' => html_entity_decode((string)$item->description, ENT_QUOTES, 'UTF-8')
         ];
     }
 
-    usort($items, function($a, $b) {
-        return strtotime($b['date']) - strtotime($a['date']);
+    usort($items, function ($a, $b) {
+        return $b['timestamp'] <=> $a['timestamp']; // ✅ bulletproof
     });
 
     return $items;
