@@ -1,5 +1,5 @@
 <?php
-require_once 'auth.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/includes/auth.php';
 check_login();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -9,15 +9,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $description = htmlspecialchars($_POST['description']);
     $pubDate = date('r', strtotime($_POST['pubdate']));
 
+
+$link = str_replace('&', '&amp;', $link);
+
+
     // Create new item XML (properly escaped)
-    $newItem = <<<XML
+$newItem = <<<XML
     <item>
-        <title><![CDATA[$title]]></title>
-        <link>$link</link>
-        <description><![CDATA[$description]]></description>
-        <pubDate>$pubDate</pubDate>
+        <title><![CDATA[{$title}]]></title>
+        <link>{$link}</link>
+        <description><![CDATA[{$description}]]></description>
+        <pubDate>{$pubDate}</pubDate>
     </item>
 XML;
+
 
     // Load or create feed
     if (file_exists('feed.xml') && filesize('feed.xml') > 0) {
@@ -60,10 +65,16 @@ $defaultDate = date('Y-m-d\TH:i');
 <html>
 <head>
     <title>Add RSS Item</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; }
-        textarea { width: 100%; height: 150px; }
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; padding: 20px;
+        background-image: url("/images/skybg.jpg"); }
+        textarea { width: 100%; height: 150px;
+        }
         .form-group { margin-bottom: 15px; }
+        .box {
+            background-color: #ffffff:
+        }
     </style>
 </head>
 <body>
