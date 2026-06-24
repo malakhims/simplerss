@@ -2,8 +2,8 @@
 session_start();
 
 // ===== Single User Configuration =====
-$username = 'username';  // Keep as is
-$password = '$password';  // Paste your generated hash here
+$username = 'testentries';  // Keep as is
+$password = '$testmoney';  // Paste your generated hash here
 // ====================================
 
 function check_login() {
@@ -23,7 +23,6 @@ function check_login() {
     }
     return true;
 }
-
 
 function show_login_form() {
     echo '
