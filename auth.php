@@ -2,9 +2,8 @@
 session_start();
 
 // ===== Single User Configuration =====
-$username = 'testentries';  
-// HASHED
-$password = '$MYHASHMYHASHMYHASMYHASH';  // Paste your generated hash here
+$username = 'username';  // Keep as is
+$password = '$password';  // Paste your generated hash here
 // ====================================
 
 function check_login() {
@@ -12,7 +11,7 @@ function check_login() {
     
     if (!isset($_SESSION['logged_in'])) {
         if (isset($_POST['username']) && isset($_POST['password'])) {
-            // password_verify securely compares the plain text input against your hash
+            // Check username AND verify if the submitted password matches the stored hash
             if ($_POST['username'] === $username && password_verify($_POST['password'], $password)) {
                 $_SESSION['logged_in'] = true;
                 return true;
