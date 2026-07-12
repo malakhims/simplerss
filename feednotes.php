@@ -1,8 +1,7 @@
 <?php
-
 function getFeedItems() {
-    $feedPath = $_SERVER['DOCUMENT_ROOT'] . '/rss/feed.xml';
-
+    $feedPath = "rss/feed.xml";
+    
     if (!file_exists($feedPath) || filesize($feedPath) == 0) {
         return [];
     }
@@ -15,26 +14,30 @@ function getFeedItems() {
 
     $items = [];
     foreach ($xml->channel->item as $item) {
-        $timestamp = strtotime((string)$item->pubDate);
-
         $items[] = [
-            'timestamp'   => $timestamp, // ✅ REAL date for sorting
-            'date'        => date('n.j.y', $timestamp), // ✅ display only
-            'title'       => html_entity_decode((string)$item->title, ENT_QUOTES, 'UTF-8'),
-            'link'        => (string)$item->link,
-            'description' => html_entity_decode((string)$item->description, ENT_QUOTES, 'UTF-8')
+            'date' => date('n.j.y', strtotime((string)$item->pubDate)),
+            'title' => html_entity_decode((string)$item->title, ENT_QUOTES, 'UTF-8'), // FIXED
+            'link' => (string)$item->link,
+            'description' => html_entity_decode((string)$item->description, ENT_QUOTES, 'UTF-8') // FIXED
         ];
     }
 
-    usort($items, function ($a, $b) {
-        return $b['timestamp'] <=> $a['timestamp']; // ✅ bulletproof
+    usort($items, function($a, $b) {
+        return strtotime($b['date']) - strtotime($a['date']);
     });
 
     return $items;
 }
-
 ?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>updates in plaintext</title>
+    <style>
 
+    </style>
+</head>
+<body>
     <div class="rss-feed">
         <?php $items = getFeedItems(); ?>
         <?php if (empty($items)): ?>
@@ -43,7 +46,7 @@ function getFeedItems() {
             <?php foreach ($items as $item): ?>
             <div class="rss-item">
                 <div class="rss-header">
-                    <span class="rss-date">♚ <b><?= $item['date'] ?></b></span>
+                    <span class="rss-date"> - <b><?= $item['date'] ?></b></span>
                     <span class="rss-title"> 
                         <b>
                         <a href="<?= htmlspecialchars($item['link']) ?>"><?= htmlspecialchars($item['title']) ?></a>
@@ -56,3 +59,5 @@ function getFeedItems() {
         <?php endif; ?>
 
     </div>
+</body>
+</html>
