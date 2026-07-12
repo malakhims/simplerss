@@ -1,5 +1,4 @@
 <?php
-header('Content-Type: text/html; charset=utf-8');
 
 function getFeedItems() {
     $feedPath = $_SERVER['DOCUMENT_ROOT'] . '/rss/feed.xml';
@@ -33,16 +32,9 @@ function getFeedItems() {
 
     return $items;
 }
-?>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>updates in plaintext</title>
-    <style>
 
-    </style>
-</head>
-<body>
+?>
+
     <div class="rss-feed">
         <?php $items = getFeedItems(); ?>
         <?php if (empty($items)): ?>
@@ -51,7 +43,7 @@ function getFeedItems() {
             <?php foreach ($items as $item): ?>
             <div class="rss-item">
                 <div class="rss-header">
-                    <span class="rss-date"> - <b><?= $item['date'] ?></b></span>
+                    <span class="rss-date">♚ <b><?= $item['date'] ?></b></span>
                     <span class="rss-title"> 
                         <b>
                         <a href="<?= htmlspecialchars($item['link']) ?>"><?= htmlspecialchars($item['title']) ?></a>
@@ -64,5 +56,3 @@ function getFeedItems() {
         <?php endif; ?>
 
     </div>
-</body>
-</html>
